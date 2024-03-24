@@ -1,0 +1,46 @@
+def count_points(hand):
+    points = 0
+
+    # Pair
+    for i in range(len(hand)):
+        for j in range(i+1, len(hand)):
+            if hand[i][0] == hand[j][0]:
+                points += 2
+
+    # Fifteen
+    for i in range(len(hand)):
+        total = hand[i][1]
+        if total == 15:
+            points += 2
+        for j in range(i+1, len(hand)):
+            total += hand[j][1]
+            if total == 15:
+                points += 2
+
+    # Runs
+    hand.sort()
+    run = 1
+    for i in range(len(hand)-1):
+        if hand[i+1][0] - hand[i][0] == 1:
+            run += 1
+        else:
+            if run >= 3:
+                points += run
+            run = 1
+    if run >= 3:
+        points += run
+
+    # Flush
+    if all(card[2] == hand[0][2] for card in hand):
+        points += len(hand)
+
+    return points
+
+def main():
+    # Example hand: (value, point, suit)
+    hand = [(5, 5, 'Hearts'), (10, 10, 'Diamonds'), (10, 10, 'Hearts'), (11, 10, 'Spades'), (11, 10, 'Clubs')]
+    points = count_points(hand)
+    print("Points for the hand:", points)
+
+if __name__ == "__main__":
+    main()
